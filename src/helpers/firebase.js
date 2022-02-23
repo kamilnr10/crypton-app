@@ -16,12 +16,15 @@ import {
   collection,
   where,
   addDoc,
+  firebase,
 } from 'firebase/firestore';
+import 'firebase/database';
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSyC2ZM_mWEh_LAZ_AGN0uMOFQ7MfIl4tuVk',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: 'fir-auth-article-e04e4.firebaseapp.com',
-  projectId: 'fir-auth-article-e04e4',
+  databaseURL: `https://${process.env.REACT_APP_FIREBASE_PROJECT_ID}-default-rtdb.firebaseio.com`,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
   storageBucket: 'fir-auth-article-e04e4.appspot.com',
   messagingSenderId: '565006997049',
   appId: '1:565006997049:web:0a12c72f71f626513c5fe8',

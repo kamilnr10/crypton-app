@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import { auth, db, logout } from 'helpers/firebase';
 import { query, collection, getDocs, where } from 'firebase/firestore';
+import styled from 'styled-components';
 
 const Dashboard = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -23,7 +26,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (loading) return;
+    console.log(loading);
+    if (loading) return null;
     if (!user) return navigate('/');
     fetchUserName();
   }, [user, loading]);
@@ -37,6 +41,7 @@ const Dashboard = () => {
         <button className="dashboard__btn" onClick={logout}>
           Logout
         </button>
+        <Link to="game">Play</Link>
       </div>
     </div>
   );
