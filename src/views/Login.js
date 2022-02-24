@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  auth,
-  logInWithEmailAndPassword,
-  signInWithGoogle,
-} from 'helpers/firebase';
+import { auth } from 'helpers/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import './Login.css';
 import styled from 'styled-components';
@@ -63,19 +59,23 @@ const Button = styled.button`
   /* box-shadow: 0px 7px 31px 19px rgba(56, 206, 232, 1); */
 `;
 
-const Login = () => {
+const Login = ({ setIsAuth, signInWithGoogle, logInWithEmailAndPassword }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_FIREBASE_API_KEY);
+    console.log(user);
     if (loading) {
       // maybe trigger a loading screen
       return;
     }
-    if (user) navigate('/dashboard');
+    if (user) {
+      localStorage.setItem('isAuth', true);
+      setIsAuth(true);
+      navigate('/dashboard');
+    }
   }, [user, loading]);
 
   return (

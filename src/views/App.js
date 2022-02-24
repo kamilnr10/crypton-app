@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import Login from 'views/Login';
 import Register from 'views/Register';
 import Reset from 'views/Reset';
@@ -7,11 +13,21 @@ import Dashboard from 'views/Dashboard';
 import styled, { ThemeProvider } from 'styled-components';
 import { theme } from 'assets/styles/theme';
 import { GlobalStyle } from 'assets/styles/GlobalStyle';
+import { database } from 'helpers/firebase';
+import { useNavigate } from 'react-router-dom';
+import { addDoc } from 'firebase/firestore';
+import { signOut } from 'firebase/auth';
+import { auth } from 'helpers/firebase';
+import { useLogin } from 'helpers/firebase';
+import Home from './Home';
+import CreatePost from './CreatePost';
+import ProtectedRoute from './ProtectedRoute';
 
-const Game = () => {
-  const [player1, serPlayer1] = useState('');
-  return <p>Home</p>;
+const NotFound = () => {
+  return <p>Not found</p>;
 };
+
+const datab = console.log(database);
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -20,17 +36,50 @@ const Wrapper = styled.div`
 `;
 
 function App() {
+  const {
+    isAuth,
+    signInWithGoogle,
+    logInWithEmailAndPassword,
+    registerWithEmailAndPassword,
+    sendPasswordReset,
+    setIsAuth,
+    logout,
+  } = useLogin();
+
+  useEffect(() => {
+    console.log('is auth: ', isAuth);
+    if (isAuth) {
+    }
+  }, [isAuth]);
+
   return (
     <Router>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Wrapper>
           <Routes>
-            <Route exact path="/" element={<Login />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute isAuth={isAuth}>
+                  <Dashboard signUserOut={logout} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path="/login"
+              element={
+                <Login
+                  setIsAuth={setIsAuth}
+                  signInWithGoogle={signInWithGoogle}
+                  logInWithEmailAndPassword={logInWithEmailAndPassword}
+                />
+              }
+            />
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/reset" element={<Reset />} />
-            <Route exact path="/dashboard" element={<Dashboard />} />
-            {/* <Route exact path="/dashboard/game" element={<Game />} /> */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Wrapper>
       </ThemeProvider>
