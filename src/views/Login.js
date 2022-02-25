@@ -4,6 +4,7 @@ import { auth } from 'helpers/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import './Login.css';
 import styled from 'styled-components';
+import { useUserAuth } from 'context/UserAuthContext';
 
 const LoginForm = styled.div`
   height: 100%;
@@ -59,14 +60,16 @@ const Button = styled.button`
   /* box-shadow: 0px 7px 31px 19px rgba(56, 206, 232, 1); */
 `;
 
-const Login = ({ setIsAuth, signInWithGoogle, logInWithEmailAndPassword }) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
+  const { setIsAuth, signInWithGoogle, logInWithEmailAndPassword } =
+    useUserAuth();
 
   useEffect(() => {
-    console.log(user);
+    console.log('user', user);
     if (loading) {
       // maybe trigger a loading screen
       return;

@@ -3,14 +3,17 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
-import { auth, db, logout } from 'helpers/firebase';
+import { auth, db } from 'helpers/firebase';
 import { query, collection, getDocs, where } from 'firebase/firestore';
 import styled from 'styled-components';
+import { useUserAuth } from 'context/UserAuthContext';
 
-const Dashboard = ({ signUserOut }) => {
+const Dashboard = () => {
   const [user, loading, error] = useAuthState(auth);
   const [name, setName] = useState('');
   const navigate = useNavigate();
+  const { logout } = useUserAuth();
+  // console.log(logout);
 
   const fetchUserName = async () => {
     try {
@@ -38,9 +41,6 @@ const Dashboard = ({ signUserOut }) => {
         <div>{user?.email}</div>
         <button className="dashboard__btn" onClick={logout}>
           Logout
-        </button>
-        <button className="dashboard__btn" onClick={signUserOut}>
-          Logout 2
         </button>
         <Link to="game">Create post</Link>
       </div>
