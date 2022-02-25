@@ -28,7 +28,7 @@ const NotFound = () => {
   return <p>Not found</p>;
 };
 
-const datab = console.log(database);
+// const datab = console.log(database);
 
 const Wrapper = styled.div`
   height: 100vh;
