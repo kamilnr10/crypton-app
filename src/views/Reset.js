@@ -4,6 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { auth, sendPasswordReset } from 'helpers/firebase';
 import './Reset.css';
+import {
+  LoginForm,
+  LoginContainer,
+  CircleBackground,
+  LoginTextBox,
+  Button,
+} from './Login';
 
 const Reset = () => {
   const [email, setEmail] = useState('');
@@ -16,23 +23,24 @@ const Reset = () => {
   }, [user, loading]);
 
   return (
-    <div className="reset">
-      <div className="reset__container">
-        <input
+    <LoginForm>
+      <LoginContainer>
+        <CircleBackground />
+        <LoginTextBox
           type="text"
           className="reset__textBox"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="E-mail Address"
         />
-        <button className="reset__btn" onClick={() => sendPasswordReset(email)}>
+        <Button onClick={() => sendPasswordReset(email)}>
           Send password reset email
-        </button>
+        </Button>
         <div>
           Don't have an account? <Link to="/register">Register</Link> now.
         </div>
-      </div>
-    </div>
+      </LoginContainer>
+    </LoginForm>
   );
 };
 export default Reset;

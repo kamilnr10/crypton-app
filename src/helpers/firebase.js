@@ -42,6 +42,7 @@ export const googleProvider = new GoogleAuthProvider();
 
 export const useLogin = () => {
   const [isAuth, setIsAuth] = useState(false);
+  const [errors, setErrors] = useState({ signIn: {}, signInGoogle: {} });
   //   const navigate = useNavigate();
 
   const signInWithGoogle = async () => {
@@ -62,6 +63,7 @@ export const useLogin = () => {
         // navigate('/dashboard');
       }
     } catch (err) {
+      setErrors({ signInGoogle: 'Please provide Email and Password' });
       console.error(err);
       alert(err.message);
     }
@@ -73,7 +75,8 @@ export const useLogin = () => {
       setIsAuth(true);
       //   navigate('/dashboard');
     } catch (err) {
-      console.error(err);
+      setErrors({ signIn: 'Please provide Email and Password' });
+      console.log(errors);
       alert(err.message);
     }
   };

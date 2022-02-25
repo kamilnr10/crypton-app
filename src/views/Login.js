@@ -6,7 +6,7 @@ import './Login.css';
 import styled from 'styled-components';
 import { useUserAuth } from 'context/UserAuthContext';
 
-const LoginForm = styled.div`
+export const LoginForm = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
@@ -14,7 +14,7 @@ const LoginForm = styled.div`
   align-items: center;
 `;
 
-const LoginContainer = styled.div`
+export const LoginContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -27,7 +27,7 @@ const LoginContainer = styled.div`
   z-index: 10;
 `;
 
-const CircleBackground = styled.div`
+export const CircleBackground = styled.div`
   position: absolute;
   width: 700px;
   height: 700px;
@@ -39,7 +39,7 @@ const CircleBackground = styled.div`
   z-index: -1;
 `;
 
-const LoginTextBox = styled.input`
+export const LoginTextBox = styled.input`
   padding: 10px;
   font-size: 18px;
   margin-bottom: 10px;
@@ -49,7 +49,7 @@ const LoginTextBox = styled.input`
   box-shadow: inset 0px 6px 20px 4px rgba(209, 220, 232, 1);
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   padding: 10px;
   font-size: 18px;
   margin-bottom: 10px;
