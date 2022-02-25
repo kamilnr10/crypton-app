@@ -22,6 +22,7 @@ import { useLogin } from 'helpers/firebase';
 import Home from './Home';
 import CreatePost from './CreatePost';
 import ProtectedRoute from './ProtectedRoute';
+import { UserAuthContextProvider } from 'context/UserAuthContext';
 
 const NotFound = () => {
   return <p>Not found</p>;
@@ -36,52 +37,28 @@ const Wrapper = styled.div`
 `;
 
 function App() {
-  const {
-    isAuth,
-    signInWithGoogle,
-    logInWithEmailAndPassword,
-    registerWithEmailAndPassword,
-    sendPasswordReset,
-    setIsAuth,
-    logout,
-  } = useLogin();
-
-  useEffect(() => {
-    console.log('is auth: ', isAuth);
-    if (isAuth) {
-    }
-  }, [isAuth]);
-
   return (
     <Router>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <Wrapper>
-          <Routes>
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute isAuth={isAuth}>
-                  <Dashboard signUserOut={logout} />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              exact
-              path="/login"
-              element={
-                <Login
-                  setIsAuth={setIsAuth}
-                  signInWithGoogle={signInWithGoogle}
-                  logInWithEmailAndPassword={logInWithEmailAndPassword}
-                />
-              }
-            />
-            <Route exact path="/register" element={<Register />} />
-            <Route exact path="/reset" element={<Reset />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Wrapper>
+        <UserAuthContextProvider>
+          <Wrapper>
+            <Routes>
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route exact path="/login" element={<Login />} />
+              <Route exact path="/register" element={<Register />} />
+              <Route exact path="/reset" element={<Reset />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Wrapper>
+        </UserAuthContextProvider>
       </ThemeProvider>
     </Router>
   );

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useUserAuth } from 'context/UserAuthContext';
 
-const ProtectedRoute = ({ isAuth, children }) => {
-  let auth = isAuth;
+const ProtectedRoute = ({ children }) => {
+  const { user } = useUserAuth();
+  console.log(user);
+  //   let auth = isAuth;
 
-  if (!auth) {
+  if (!user) {
     return <Navigate to="/login" />;
   }
   return children;
