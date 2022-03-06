@@ -14,6 +14,7 @@ export const UserAuthContextProvider = ({ children }) => {
     registerWithEmailAndPassword,
     sendPasswordReset,
     logout,
+    errors,
   } = useLogin();
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export const UserAuthContextProvider = ({ children }) => {
         registerWithEmailAndPassword,
         sendPasswordReset,
         logout,
+        errors,
       }}
     >
       {children}

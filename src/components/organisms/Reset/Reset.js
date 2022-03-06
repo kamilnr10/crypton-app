@@ -3,16 +3,14 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { auth, sendPasswordReset } from 'helpers/firebase';
-import './Reset.css';
-import {
-  LoginForm,
-  LoginContainer,
-  CircleBackground,
-  LoginTextBox,
-  Button,
-} from './Login';
+import { FormContainer } from 'components/atoms/FormContainer/FormContainer';
+import { FormWrapper } from 'components/atoms/FormWrapper/FormWrapper';
+import { CircleBackground } from 'components/atoms/CircleBackground/CircleBackground';
+import { Input } from 'components/atoms/Input/Input';
+import { ErrorBox } from 'components/atoms/ErrorBox/ErrorBox';
+import { Button } from 'components/atoms/Button/Button';
 
-const Reset = () => {
+export const Reset = () => {
   const [email, setEmail] = useState('');
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
@@ -23,10 +21,10 @@ const Reset = () => {
   }, [user, loading]);
 
   return (
-    <LoginForm>
-      <LoginContainer>
+    <FormWrapper>
+      <FormContainer>
         <CircleBackground />
-        <LoginTextBox
+        <Input
           type="text"
           className="reset__textBox"
           value={email}
@@ -39,8 +37,7 @@ const Reset = () => {
         <div>
           Don't have an account? <Link to="/register">Register</Link> now.
         </div>
-      </LoginContainer>
-    </LoginForm>
+      </FormContainer>
+    </FormWrapper>
   );
 };
-export default Reset;

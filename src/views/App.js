@@ -1,28 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-} from 'react-router-dom';
-import Login from 'views/Login';
-import Register from 'views/Register';
-import Reset from 'views/Reset';
-import Dashboard from 'views/Dashboard';
 import styled, { ThemeProvider } from 'styled-components';
-import { theme } from 'assets/styles/theme';
-import { GlobalStyle } from 'assets/styles/GlobalStyle';
-import { database } from 'helpers/firebase';
-import { useNavigate } from 'react-router-dom';
-import { addDoc } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
-import { auth } from 'helpers/firebase';
-import { useLogin } from 'helpers/firebase';
-import Home from './Home';
-import CreatePost from './CreatePost';
-import ProtectedRoute from './ProtectedRoute';
-import { UserAuthContextProvider } from 'context/UserAuthContext';
+import { useUserAuth } from 'context/UserAuthContext';
+import { AuthenticatedApp } from 'views/AuthenticatedApp/AuthenticatedApp';
+import { UnauthenticatedApp } from 'views/UnauthenticatedApp/UnathenticatedApp';
 
 const NotFound = () => {
   return <p>Not found</p>;
@@ -36,31 +16,87 @@ const Wrapper = styled.div`
   background-color: #f5f5f5;
 `;
 
-function App() {
+const Navigation = () => {
   return (
-    <Router>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <UserAuthContextProvider>
-          <Wrapper>
-            <Routes>
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route exact path="/login" element={<Login />} />
-              <Route exact path="/register" element={<Register />} />
-              <Route exact path="/reset" element={<Reset />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Wrapper>
-        </UserAuthContextProvider>
-      </ThemeProvider>
-    </Router>
+    <nav>
+      <ul>
+        <li>Home</li>
+        <li>Porfile</li>
+      </ul>
+    </nav>
   );
+};
+
+export const MainTemplate = ({ children }) => {
+  return (
+    <Wrapper>
+      <Navigation />
+      {children}
+    </Wrapper>
+  );
+};
+
+const AddWrapper = styled.div`
+  height: 200px;
+  width: 200px;
+  background-color: red;
+`;
+
+const AddEdit = () => {
+  console.log('add edit');
+  return <AddWrapper>Add edit view</AddWrapper>;
+};
+
+// const AuthenticatedApp = () => {
+//   return (
+//     <MainTemplate>
+//       <Routes>
+//         <Route path="dashboard" element={<Dashboard />} />
+//       </Routes>
+//     </MainTemplate>
+//   );
+// };
+
+// const UnauthenticatedApp = () => {
+//   return (
+//     <Wrapper>
+//       <Login />
+//       <Routes>
+//         <Route exact path="/" element={<Login />} />
+//         <Route exact path="/register" element={<Register />} />
+//         <Route exact path="/reset" element={<Reset />} />
+//       </Routes>
+//     </Wrapper>
+//   );
+// };
+
+function App() {
+  const { isAuth } = useUserAuth();
+  console.log('App: ', isAuth);
+
+  return isAuth ? <AuthenticatedApp /> : <UnauthenticatedApp />;
+
+  // return (
+  //   <ThemeProvider theme={theme}>
+  //     <GlobalStyle />
+
+  //     <Wrapper>
+  //       <Routes>
+  //         <Route
+  //           path="dashboard"
+  //           element={
+  //             <ProtectedRoute>
+  //               <Dashboard />
+  //             </ProtectedRoute>
+  //           }
+  //         />
+  //         <Route exact path="/" element={<Login />} />
+  //         <Route exact path="/register" element={<Register />} />
+  //         <Route exact path="/reset" element={<Reset />} />
+  //         <Route path="*" element={<NotFound />} />
+  //       </Routes>
+  //     </Wrapper>
+  //   </ThemeProvider>
+  // );
 }
 export default App;
