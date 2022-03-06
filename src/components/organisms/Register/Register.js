@@ -6,16 +6,14 @@ import {
   registerWithEmailAndPassword,
   signInWithGoogle,
 } from 'helpers/firebase';
-import './Register.css';
-import {
-  LoginForm,
-  LoginContainer,
-  CircleBackground,
-  LoginTextBox,
-  Button,
-} from './Login';
+import { FormContainer } from 'components/atoms/FormContainer/FormContainer';
+import { FormWrapper } from 'components/atoms/FormWrapper/FormWrapper';
+import { CircleBackground } from 'components/atoms/CircleBackground/CircleBackground';
+import { Input } from 'components/atoms/Input/Input';
+import { ErrorBox } from 'components/atoms/ErrorBox/ErrorBox';
+import { Button } from 'components/atoms/Button/Button';
 
-const Register = () => {
+export const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
@@ -38,31 +36,31 @@ const Register = () => {
   }, [user, loading]);
 
   return (
-    <LoginForm>
-      <LoginContainer>
+    <FormWrapper>
+      <FormContainer>
         <CircleBackground />
-        <LoginTextBox
+        <Input
           type="text"
           className="register__textBox"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Full Name"
         />
-        <LoginTextBox
+        <Input
           type="text"
           className="register__textBox"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="E-mail Address"
         />
-        <LoginTextBox
+        <Input
           type="password"
           className="register__textBox"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <LoginTextBox
+        <Input
           type="password"
           className="register__textBox"
           value={password2}
@@ -79,8 +77,7 @@ const Register = () => {
         <div>
           Already have an account? <Link to="/">Login</Link> now.
         </div>
-      </LoginContainer>
-    </LoginForm>
+      </FormContainer>
+    </FormWrapper>
   );
 };
-export default Register;

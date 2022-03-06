@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import './Dashboard.css';
 import { auth, db } from 'helpers/firebase';
 import { query, collection, getDocs, where } from 'firebase/firestore';
 import styled from 'styled-components';
@@ -34,16 +33,12 @@ const Dashboard = () => {
   }, [user, loading]);
 
   return (
-    <div className="dashboard">
-      <div className="dashboard__container">
-        Logged in as
-        <div>{name}</div>
-        <div>{user?.email}</div>
-        <button className="dashboard__btn" onClick={logout}>
-          Logout
-        </button>
-        <Link to="game">Create post</Link>
-      </div>
+    <div>
+      Logged in as
+      <div>{name}</div>
+      <div>{user?.email}</div>
+      <button onClick={logout}>Logout</button>
+      <Link to="/dashboard/add">Create post</Link>
     </div>
   );
 };
