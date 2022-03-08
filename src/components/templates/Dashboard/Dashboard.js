@@ -4,8 +4,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from 'helpers/firebase';
 import { query, collection, getDocs, where } from 'firebase/firestore';
-import styled from 'styled-components';
 import { useUserAuth } from 'context/UserAuthContext';
+import axios from 'axios';
 
 const Dashboard = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -29,6 +29,11 @@ const Dashboard = () => {
   useEffect(() => {
     if (loading) return null;
     if (!user) return navigate('/');
+    axios
+      .get(
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
+      )
+      .then((data) => console.log(data));
     fetchUserName();
   }, [user, loading]);
 
