@@ -1,12 +1,23 @@
 import React from 'react';
+import styled from 'styled-components';
 
-export const Navigation = () => {
+const NavWrapper = styled.nav`
+  ul {
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+  }
+`;
+
+export const NavigationTop = () => {
   return (
-    <nav>
+    <NavWrapper>
       <ul>
         <li>Home</li>
-        <li>Porfile</li>
+        <li>Profile</li>
       </ul>
-    </nav>
+    </NavWrapper>
   );
 };
