@@ -11,12 +11,15 @@ body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #232328;
+
 }
 
 *, *::after, *::before {
     box-sizing: inherit;
     margin: 0;
     padding: 0;
+    
 }
 
 
