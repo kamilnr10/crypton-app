@@ -10,8 +10,14 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   height: 100%;
-  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: blue; */
 `;
+
+const tableHeight =
+  ((window.innerHeight - 64 - 64 - 52 - 1) / window.innerHeight) * 100;
 
 const columns = [
   { title: 'id', field: 'market_cap_rank' },
@@ -40,12 +46,33 @@ const Dashboard = () => {
 
   return (
     <Wrapper>
-      Dashboard
+      {/* Dashboard */}
       <div>
         <MaterialTable
           columns={columns}
           data={tableData}
-          style={{ width: '100vw' }}
+          style={{
+            width: '100vw',
+            backgroundColor: 'transparent',
+            color: 'white',
+            // display: 'grid',
+            // gridTemplateColums: '1fr',
+            // gridTemplateRows: 'auto 1fr auto',
+            // height: '',
+          }}
+          options={{
+            tableLayout: 'auto',
+            paging: false,
+            maxBodyHeight: `${tableHeight}vh`,
+            minBodyHeight: `${tableHeight}vh`,
+            headerStyle: {
+              position: 'sticky',
+              top: 0,
+              backgroundColor: 'transparent',
+              color: 'white',
+            },
+          }}
+          paging={false}
         />
       </div>
     </Wrapper>
