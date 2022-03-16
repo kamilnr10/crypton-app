@@ -16,14 +16,60 @@ const Wrapper = styled.div`
   /* background-color: blue; */
 `;
 
+const SymbolWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  span {
+    font-size: 10px;
+  }
+`;
+
 const tableHeight =
   ((window.innerHeight - 64 - 64 - 52 - 1) / window.innerHeight) * 100;
 
 const columns = [
-  { title: 'id', field: 'market_cap_rank' },
-  { title: 'Symbol', field: 'symbol' },
-  { title: 'Name', field: 'name' },
-  { title: 'Price', field: 'current_price' },
+  {
+    title: '#',
+    field: 'market_cap_rank',
+    width: '8%',
+    cellStyle: {
+      textAlign: 'center',
+    },
+  },
+  {
+    title: 'COIN',
+    field: 'symbol',
+    width: '22%',
+    render: (item) => (
+      <SymbolWrapper>
+        <img src={item.image} alt="" border="0" height="15" width="15" />
+        <span>{item.symbol.toUpperCase()}</span>
+      </SymbolWrapper>
+    ),
+    cellStyle: {
+      textAlign: 'center',
+    },
+  },
+  {
+    title: 'Price',
+    field: 'current_price',
+    width: '40%',
+    cellStyle: {
+      textAlign: 'right',
+    },
+
+    type: 'currency',
+    currencySetting: {
+      currencyCode: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+  },
+  { title: '24 H', field: 'price_change_percentage_24h' },
+  { title: 'Market Cap', field: 'market_cap', type: 'currency' },
 ];
 
 const Dashboard = () => {
@@ -55,22 +101,25 @@ const Dashboard = () => {
             width: '100vw',
             backgroundColor: 'transparent',
             color: 'white',
+            fontSize: '14px',
             // display: 'grid',
             // gridTemplateColums: '1fr',
             // gridTemplateRows: 'auto 1fr auto',
             // height: '',
           }}
           options={{
-            tableLayout: 'auto',
+            tableLayout: 'fixed',
+            // columnResizable: true,
             paging: false,
             maxBodyHeight: `${tableHeight}vh`,
             minBodyHeight: `${tableHeight}vh`,
             headerStyle: {
               position: 'sticky',
               top: 0,
-              backgroundColor: 'transparent',
+              backgroundColor: '#232328',
               color: 'white',
             },
+            padding: '4px',
           }}
           paging={false}
         />
