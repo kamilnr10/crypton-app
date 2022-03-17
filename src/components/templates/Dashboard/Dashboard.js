@@ -7,70 +7,8 @@ import { useUserAuth } from 'context/UserAuthContext';
 import axios from 'axios';
 import MaterialTable, { Column } from '@material-table/core';
 import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* background-color: blue; */
-`;
-
-const SymbolWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  span {
-    font-size: 10px;
-  }
-`;
-
-const tableHeight =
-  ((window.innerHeight - 64 - 64 - 52 - 1) / window.innerHeight) * 100;
-
-const columns = [
-  {
-    title: '#',
-    field: 'market_cap_rank',
-    width: '8%',
-    cellStyle: {
-      textAlign: 'center',
-    },
-  },
-  {
-    title: 'COIN',
-    field: 'symbol',
-    width: '22%',
-    render: (item) => (
-      <SymbolWrapper>
-        <img src={item.image} alt="" border="0" height="15" width="15" />
-        <span>{item.symbol.toUpperCase()}</span>
-      </SymbolWrapper>
-    ),
-    cellStyle: {
-      textAlign: 'center',
-    },
-  },
-  {
-    title: 'Price',
-    field: 'current_price',
-    width: '40%',
-    cellStyle: {
-      textAlign: 'right',
-    },
-
-    type: 'currency',
-    currencySetting: {
-      currencyCode: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    },
-  },
-  { title: '24 H', field: 'price_change_percentage_24h' },
-  { title: 'Market Cap', field: 'market_cap', type: 'currency' },
-];
+import { tableHeight, columns } from 'helpers/columns';
+import { Wrapper, SymbolWrapper } from './Dashboard.styles';
 
 const Dashboard = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -111,15 +49,22 @@ const Dashboard = () => {
             tableLayout: 'fixed',
             // columnResizable: true,
             paging: false,
+            searchFieldStyle: {
+              color: 'white',
+            },
             maxBodyHeight: `${tableHeight}vh`,
             minBodyHeight: `${tableHeight}vh`,
+            rowStyle: {
+              fontSize: '9px',
+            },
             headerStyle: {
               position: 'sticky',
               top: 0,
-              backgroundColor: '#232328',
+              backgroundColor: '#333333',
               color: 'white',
+              fontSize: '9px',
             },
-            padding: '4px',
+            padding: '0',
           }}
           paging={false}
         />
