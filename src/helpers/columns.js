@@ -14,6 +14,9 @@ export const columns = [
     },
     headerStyle: {
       padding: '10px',
+      '&:hover': {
+        color: '#bbdefb',
+      },
     },
   },
   {
@@ -31,7 +34,7 @@ export const columns = [
     },
   },
   {
-    title: 'Price',
+    title: 'PRICE',
     field: 'current_price',
     width: '20%',
     cellStyle: {
@@ -44,6 +47,9 @@ export const columns = [
     },
     headerStyle: {
       align: 'right',
+      '&:hover': {
+        color: '#bbdefb',
+      },
       // padding: '0',
     },
     type: 'currency',
@@ -74,7 +80,7 @@ export const columns = [
     },
   },
   {
-    title: 'Market Cap',
+    title: 'MARKET CAP',
     field: 'market_cap',
     type: 'currency',
     cellStyle: {

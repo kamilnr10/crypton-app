@@ -8,7 +8,7 @@ export const Indicator = styled.div`
   height: 50px;
   background-color: #29fd53;
   border-radius: 50%;
-  border: 6px solid #000000;
+  border: 6px solid #0c0a11;
   transition: 0.5s;
 
   &::before {
@@ -20,7 +20,7 @@ export const Indicator = styled.div`
     height: 10px;
     background-color: transparent;
     border-top-right-radius: 9px;
-    box-shadow: 2px -5px 0px 2px #000000;
+    box-shadow: 2px -5px 0px 2px #0c0a11;
   }
 
   &::after {
@@ -32,6 +32,6 @@ export const Indicator = styled.div`
     height: 10px;
     background-color: transparent;
     border-top-left-radius: 9px;
-    box-shadow: -2px -5px 0px 2px #000000;
+    box-shadow: -2px -5px 0px 2px #0c0a11;
   }
 `;

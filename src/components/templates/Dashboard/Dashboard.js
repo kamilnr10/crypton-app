@@ -1,74 +1,94 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from 'helpers/firebase';
-import { query, collection, getDocs, where } from 'firebase/firestore';
-import { useUserAuth } from 'context/UserAuthContext';
+import { auth } from 'helpers/firebase';
 import axios from 'axios';
-import MaterialTable, { Column } from '@material-table/core';
-import styled from 'styled-components';
+import MaterialTable from '@material-table/core';
 import { tableHeight, columns } from 'helpers/columns';
-import { Wrapper, SymbolWrapper } from './Dashboard.styles';
+import { Wrapper } from './Dashboard.styles';
+import { endpoints } from 'data/endpoints';
 
 const Dashboard = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, error] = useAuthState(auth);
+  const [cryptocurrenciesData, setCryptocurrenciesData] = useState([]);
+  const [marketData, setMarketData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    if (loading) return null;
+    if (loading) {
+      console.log('loading');
+    }
     if (!user) return navigate('/');
     axios
-      .get(
-        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
+      .all(endpoints.map((endpoint) => axios.get(endpoint)))
+      .then(
+        axios.spread(({ data: cryptocurrencies }, { data: market }) => {
+          console.log(market);
+          setCryptocurrenciesData(cryptocurrencies);
+          setMarketData(market.data);
+          setLoading(false);
+        })
       )
-      .then((data) => {
-        console.log(data.data);
-        setTableData(data.data);
-      });
+      .catch((err) => console.log(err));
   }, [user, loading]);
+
+  const usNumberFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
 
   return (
     <Wrapper>
-      {/* Dashboard */}
-      <div>
-        <MaterialTable
-          columns={columns}
-          data={tableData}
-          style={{
-            width: '100vw',
-            backgroundColor: 'transparent',
-            color: 'white',
-            fontSize: '14px',
-            // display: 'grid',
-            // gridTemplateColums: '1fr',
-            // gridTemplateRows: 'auto 1fr auto',
-            // height: '',
-          }}
-          options={{
-            tableLayout: 'fixed',
-            // columnResizable: true,
-            paging: false,
-            searchFieldStyle: {
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <div>
+            <span>
+              {usNumberFormatter.format(marketData.total_market_cap.usd)}
+            </span>
+          </div>
+          <MaterialTable
+            title=""
+            columns={columns}
+            data={cryptocurrenciesData}
+            style={{
+              width: '100vw',
+              backgroundColor: 'transparent',
               color: 'white',
-            },
-            maxBodyHeight: `${tableHeight}vh`,
-            minBodyHeight: `${tableHeight}vh`,
-            rowStyle: {
-              fontSize: '9px',
-            },
-            headerStyle: {
-              position: 'sticky',
-              top: 0,
-              backgroundColor: '#333333',
-              color: 'white',
-              fontSize: '9px',
-            },
-            padding: '0',
-          }}
-          paging={false}
-        />
-      </div>
+              fontSize: '14px',
+            }}
+            options={{
+              tableLayout: 'fixed',
+              paging: false,
+              search: false,
+              toolbar: false,
+              maxBodyHeight: `${tableHeight}vh`,
+              minBodyHeight: `${tableHeight}vh`,
+              rowStyle: {
+                fontSize: '9px',
+              },
+              headerStyle: {
+                position: 'sticky',
+                top: 0,
+                backgroundColor: '#0c0a11',
+                color: 'white',
+                fontSize: '9px',
+                ':hover': {
+                  color: '#bbdefb',
+                },
+              },
+              padding: '0',
+            }}
+            onRowClick={(event, rowData) => {
+              console.log(rowData);
+              navigate(`/dashboard/${rowData.id}`);
+            }}
+            paging={false}
+          />
+        </div>
+      )}
     </Wrapper>
   );
 };
