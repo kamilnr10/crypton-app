@@ -7,16 +7,28 @@ import MaterialTable from '@material-table/core';
 import { tableHeight, columns } from 'helpers/columns';
 import { Wrapper } from './Dashboard.styles';
 import { endpoints } from 'data/endpoints';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCryptocurrencies } from 'redux/features/cryptosSlice';
 
 const Dashboard = () => {
   const [user, error] = useAuthState(auth);
   const [cryptocurrenciesData, setCryptocurrenciesData] = useState([]);
   const [marketData, setMarketData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const { cryptocurrencies, loading } = useSelector(
+    (state) => state.cryptocurrency
+  );
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (loading) {
+    dispatch(getCryptocurrencies());
+    console.log(cryptocurrencies);
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) {
       console.log('loading');
     }
     if (!user) return navigate('/');
@@ -24,14 +36,14 @@ const Dashboard = () => {
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then(
         axios.spread(({ data: cryptocurrencies }, { data: market }) => {
-          console.log(market);
+          // console.log(market);
           setCryptocurrenciesData(cryptocurrencies);
           setMarketData(market.data);
           setLoading(false);
         })
       )
       .catch((err) => console.log(err));
-  }, [user, loading]);
+  }, [user, isLoading]);
 
   const usNumberFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -40,7 +52,7 @@ const Dashboard = () => {
 
   return (
     <Wrapper>
-      {loading ? (
+      {isLoading ? (
         <p>Loading...</p>
       ) : (
         <div>
