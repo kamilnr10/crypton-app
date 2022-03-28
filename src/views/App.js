@@ -5,6 +5,7 @@ import { UnauthenticatedApp } from 'views/UnauthenticatedApp/UnathenticatedApp';
 
 function App() {
   const { isAuth } = useUserAuth();
+
   console.log('App: ', isAuth);
 
   return isAuth ? <AuthenticatedApp /> : <UnauthenticatedApp />;
