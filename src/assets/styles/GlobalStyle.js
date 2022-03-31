@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     color: white;
-    background-color: #0c0a11;
+    background-color: #080710;
     ${
       '' /* background-color: #232328;
      background-image: linear-gradient( #29323c 0%, #485563 100%);  */
