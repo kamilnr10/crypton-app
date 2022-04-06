@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { auth } from 'helpers/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useUserAuth } from 'context/UserAuthContext';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useLogin } from 'helpers/firebase';
 import { FormContainer } from 'components/atoms/FormContainer/FormContainer';
 import { FormWrapper } from 'components/atoms/FormWrapper/FormWrapper';
-import { CircleBackground } from 'components/atoms/CircleBackground/CircleBackground';
 import { Input } from 'components/atoms/Input/Input';
 import { ErrorBox } from 'components/atoms/ErrorBox/ErrorBox';
 import { Button } from 'components/atoms/Button/Button';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const Background = styled.div`
   height: 520px;
@@ -38,24 +36,8 @@ const Shape = styled.div`
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, loading] = useAuthState(auth);
-  //   const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const { setIsAuth, signInWithGoogle, logInWithEmailAndPassword, errors } =
-    useUserAuth();
-
-  useEffect(() => {
-    console.log('user', user);
-    if (loading) {
-      // maybe trigger a loading screen
-      return;
-    }
-    if (user) {
-      localStorage.setItem('isAuth', true);
-      setIsAuth(true);
-      navigate('/dashboard');
-    }
-  }, [user, loading]);
+  const { isAuth, token, id } = useSelector((state) => state.user);
+  const { signInWithGoogle, logInWithEmailAndPassword } = useLogin();
 
   return (
     <FormWrapper>
@@ -64,11 +46,6 @@ export const Login = () => {
         <Shape />
       </Background>
       <FormContainer>
-        {errors && (
-          <ErrorBox>
-            <p>{errors}</p>
-          </ErrorBox>
-        )}
         <Input
           type="text"
           value={email}

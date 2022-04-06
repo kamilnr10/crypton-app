@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import {
@@ -21,16 +21,18 @@ import {
   addDoc,
 } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
+import { useDispatch } from 'react-redux';
+import { setUser, removeUser } from 'redux/features/userSlice';
 
 export const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: 'fir-auth-article-e04e4.firebaseapp.com',
-  databaseURL: `https://fir-auth-article-e04e4-default-rtdb.europe-west1.firebasedatabase.app/`,
+  databaseURL: process.env.REAC_APP_FIREBASE_DATABASE_URL,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: 'fir-auth-article-e04e4.appspot.com',
-  messagingSenderId: '565006997049',
-  appId: '1:565006997049:web:0a12c72f71f626513c5fe8',
-  measurementId: 'G-4RKYFNFM5C',
+  storageBucket: process.env.REAC_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REAC_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REAC_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REAC_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -43,7 +45,8 @@ export const googleProvider = new GoogleAuthProvider();
 export const useLogin = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [errors, setErrors] = useState('');
-  //   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const signInWithGoogle = async () => {
     try {
@@ -51,7 +54,8 @@ export const useLogin = () => {
       const user = res.user;
       const q = query(collection(db, 'users'), where('uid', '==', user.uid));
       const docs = await getDocs(q);
-      if (docs.docs.length === 0) {
+      if (user) {
+        console.log('klik2');
         await addDoc(collection(db, 'users'), {
           uid: user.uid,
           name: user.displayName,
@@ -59,8 +63,14 @@ export const useLogin = () => {
           email: user.email,
         });
         localStorage.setItem('isAuth', true);
-        setIsAuth(true);
-        // navigate('/dashboard');
+        dispatch(
+          setUser({
+            email: user.email,
+            id: user.uid,
+            token: user.accessToken,
+          })
+        );
+        navigate('/dashboard');
       }
     } catch (err) {
       setErrors(err.message);
@@ -70,9 +80,21 @@ export const useLogin = () => {
   };
   const logInWithEmailAndPassword = async (email, password) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      localStorage.setItem('isAuth', true);
-      setIsAuth(true);
+      await signInWithEmailAndPassword(auth, email, password).then(
+        ({ user }) => {
+          localStorage.setItem('isAuth', true);
+          // setIsAuth(true);
+          dispatch(
+            setUser({
+              email: user.email,
+              id: user.uid,
+              token: user.accessToken,
+            })
+          );
+          navigate('/dashboard');
+        }
+      );
+
       //   navigate('/dashboard');
     } catch (err) {
       setErrors(err.message);
@@ -91,7 +113,7 @@ export const useLogin = () => {
         email,
       });
     } catch (err) {
-      setErrors(err.message);
+      // setErrors(err.message);
       console.error(err);
       alert(err.message);
     }
@@ -101,6 +123,7 @@ export const useLogin = () => {
     try {
       await sendPasswordResetEmail(auth, email);
       alert('Password reset link sent!');
+      navigate('/');
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -108,11 +131,16 @@ export const useLogin = () => {
   };
 
   const logout = () => {
-    signOut(auth).then(() => {
-      localStorage.clear();
-      setIsAuth(false);
-      window.location.pathname = '/';
-    });
+    signOut(auth)
+      .then(() => {
+        localStorage.clear();
+        dispatch(removeUser());
+        navigate('/');
+        // window.location.pathname = '/';
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return {
@@ -127,59 +155,59 @@ export const useLogin = () => {
   };
 };
 
-export const signInWithGoogle = async () => {
-  try {
-    const res = await signInWithPopup(auth, googleProvider);
-    const user = res.user;
-    const q = query(collection(db, 'users'), where('uid', '==', user.uid));
-    const docs = await getDocs(q);
-    if (docs.docs.length === 0) {
-      await addDoc(collection(db, 'users'), {
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: 'google',
-        email: user.email,
-      });
-    }
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
-export const logInWithEmailAndPassword = async (email, password) => {
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
-export const registerWithEmailAndPassword = async (name, email, password) => {
-  try {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
-    const user = res.user;
-    await addDoc(collection(db, 'users'), {
-      uid: user.uid,
-      name,
-      authProvider: 'local',
-      email,
-    });
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
+// export const signInWithGoogle = async () => {
+//   try {
+//     const res = await signInWithPopup(auth, googleProvider);
+//     const user = res.user;
+//     const q = query(collection(db, 'users'), where('uid', '==', user.uid));
+//     const docs = await getDocs(q);
+//     if (docs.docs.length === 0) {
+//       await addDoc(collection(db, 'users'), {
+//         uid: user.uid,
+//         name: user.displayName,
+//         authProvider: 'google',
+//         email: user.email,
+//       });
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     alert(err.message);
+//   }
+// };
+// export const logInWithEmailAndPassword = async (email, password) => {
+//   try {
+//     await signInWithEmailAndPassword(auth, email, password);
+//   } catch (err) {
+//     console.error(err);
+//     alert(err.message);
+//   }
+// };
+// export const registerWithEmailAndPassword = async (name, email, password) => {
+//   try {
+//     const res = await createUserWithEmailAndPassword(auth, email, password);
+//     const user = res.user;
+//     await addDoc(collection(db, 'users'), {
+//       uid: user.uid,
+//       name,
+//       authProvider: 'local',
+//       email,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     alert(err.message);
+//   }
+// };
 
-export const sendPasswordReset = async (email) => {
-  try {
-    await sendPasswordResetEmail(auth, email);
-    alert('Password reset link sent!');
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
+// export const sendPasswordReset = async (email) => {
+//   try {
+//     await sendPasswordResetEmail(auth, email);
+//     alert('Password reset link sent!');
+//   } catch (err) {
+//     console.error(err);
+//     alert(err.message);
+//   }
+// };
 
-export const logout = () => {
-  signOut(auth);
-};
+// export const logout = () => {
+//   signOut(auth);
+// };

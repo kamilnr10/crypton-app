@@ -1,49 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from 'helpers/firebase';
-import { query, collection, getDocs, where } from 'firebase/firestore';
-import { useUserAuth } from 'context/UserAuthContext';
-import axios from 'axios';
+import { removeUser } from 'redux/features/userSlice';
+import { useDispatch } from 'react-redux';
+import { useAuth } from 'hooks/useAuth';
+import { useLogin } from 'helpers/firebase';
 
 const More = () => {
-  const [user, loading, error] = useAuthState(auth);
-  const [name, setName] = useState('');
   const navigate = useNavigate();
-  const { logout } = useUserAuth();
-  // console.log(logout);
+  const dispatch = useDispatch();
+  const { isAuth, email } = useAuth();
 
-  const fetchUserName = async () => {
-    try {
-      const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
-      const doc = await getDocs(q);
-      const data = doc.docs[0].data();
-      setName(data.name);
-    } catch (err) {
-      console.error(err);
-      alert('An error occured while fetching user data');
-    }
-  };
+  const { logout } = useLogin();
 
-  useEffect(() => {
-    if (loading) return null;
-    if (!user) return navigate('/');
-    axios
-      .get(
-        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
-      )
-      .then((data) => console.log(data));
-    fetchUserName();
-  }, [user, loading]);
+  // const fetchUserName = async () => {
+  //   try {
+  //     const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
+  //     const doc = await getDocs(q);
+  //     const data = doc.docs[0].data();
+  //     setName(data.name);
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert('An error occured while fetching user data');
+  //   }
+  // };
 
   return (
     <div>
-      Logged in as
-      <div>{name}</div>
-      <div>{user?.email}</div>
-      <button onClick={logout}>Logout</button>
-      <Link to="/dashboard/add">Create post</Link>
+      <h1>Welcome</h1>
+
+      <button onClick={logout}>Log out from {email}</button>
     </div>
   );
 };
