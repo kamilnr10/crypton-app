@@ -1,12 +1,8 @@
 import React from 'react';
-import Dashboard from 'components/templates/Dashboard/Dashboard';
+import Dashboard from 'pages/Dashboard/Dashboard';
 import { MainTemplate } from 'components/templates/MainTemplate/MainTemplate';
 import { Route, Routes } from 'react-router-dom';
-import Portfolio from 'components/templates/Portfolio/Portfolio';
-import Search from 'components/templates/Search/Search';
-import Explore from 'components/templates/Explore/Explore';
-import More from 'components/templates/More/More';
-import { CoinDetail } from 'components/templates/CoinDetail/CoinDetail';
+import { Portfolio, Search, Explore, More, CoinDetail } from 'pages/index';
 
 export const AuthenticatedApp = () => {
   return (

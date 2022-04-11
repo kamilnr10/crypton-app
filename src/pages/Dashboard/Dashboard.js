@@ -16,7 +16,6 @@ const Dashboard = () => {
   const [marketData, setMarketData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const navigate = useNavigate();
-
   const { cryptocurrencies, loading } = useSelector(
     (state) => state.cryptocurrency
   );
