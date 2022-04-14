@@ -53,7 +53,7 @@ const CoinDetail = () => {
     };
 
     fetchData().catch((err) => console.timeLog(err));
-  }, []);
+  }, [id]);
 
   return (
     <CoinDetailWrapper>

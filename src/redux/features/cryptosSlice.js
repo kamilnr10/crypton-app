@@ -3,27 +3,35 @@ import axios from 'axios';
 import { endpoints } from 'data/endpoints';
 
 export const getCryptocurrencies = createAsyncThunk(
-  'cryptocurrrencies/getCryptocurrencies',
+  'crypto/getCryptocurrencies',
   async () => {
-    return axios
-      .all(endpoints.map((endpoint) => axios.get(endpoint)))
-      .then((data) => console.log(data));
+    const res = await axios
+      .get(
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
+      )
+      .then(({ data }) => {
+        return data;
+      });
+    // console.log(res);
+    return res;
   }
 );
 
-const cryptosSlice = createSlice({
-  name: 'cryptocurrencies',
+const cryptoSlice = createSlice({
+  name: 'crypto',
   initialState: {
-    cryptocurrencies: [],
-    loading: false,
+    entities: [],
+    loading: true,
   },
+  reducers: {},
   extraReducers: {
     [getCryptocurrencies.pending]: (state, action) => {
       state.loading = true;
     },
-    [getCryptocurrencies.fulfilled]: (state, action) => {
+    [getCryptocurrencies.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.cryptocurrencies = action.payload;
+      state.entities = payload;
+      console.log(state.entities);
     },
     [getCryptocurrencies.rejected]: (state, action) => {
       state.loading = false;
@@ -31,4 +39,4 @@ const cryptosSlice = createSlice({
   },
 });
 
-export default cryptosSlice.reducer;
+export const cryptoReducer = cryptoSlice.reducer;

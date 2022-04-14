@@ -1,69 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from 'helpers/firebase';
-import axios from 'axios';
 import MaterialTable from '@material-table/core';
 import { tableHeight, columns } from 'helpers/columns';
 import { Wrapper } from './Dashboard.styles';
-import { endpoints } from 'data/endpoints';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCryptocurrencies } from 'redux/features/cryptosSlice';
+import Market from 'components/organisms/Market/Market.js';
 
 const Dashboard = () => {
-  const [user, error] = useAuthState(auth);
-  const [cryptocurrenciesData, setCryptocurrenciesData] = useState([]);
-  const [marketData, setMarketData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { cryptocurrencies, loading } = useSelector(
-    (state) => state.cryptocurrency
-  );
+  const { entities, loading } = useSelector((state) => state.crypto);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCryptocurrencies());
-    console.log(cryptocurrencies);
+    console.log(loading);
   }, []);
-
-  useEffect(() => {
-    if (isLoading) {
-      console.log('loading');
-    }
-    if (!user) return navigate('/');
-    axios
-      .all(endpoints.map((endpoint) => axios.get(endpoint)))
-      .then(
-        axios.spread(({ data: cryptocurrencies }, { data: market }) => {
-          // console.log(market);
-          setCryptocurrenciesData(cryptocurrencies);
-          setMarketData(market.data);
-          setLoading(false);
-        })
-      )
-      .catch((err) => console.log(err));
-  }, [user, isLoading]);
-
-  const usNumberFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  });
 
   return (
     <Wrapper>
-      {isLoading ? (
+      {loading ? (
         <p>Loading...</p>
       ) : (
         <div>
-          <div>
-            <span>
-              {usNumberFormatter.format(marketData.total_market_cap.usd)}
-            </span>
-          </div>
+          <Market />
           <MaterialTable
             title=""
             columns={columns}
-            data={cryptocurrenciesData}
+            data={entities}
             style={{
               width: '100vw',
               backgroundColor: 'transparent',
@@ -90,7 +54,7 @@ const Dashboard = () => {
                   color: '#bbdefb',
                 },
               },
-              padding: '0',
+              padding: 'dense',
             }}
             onRowClick={(event, rowData) => {
               console.log(rowData);

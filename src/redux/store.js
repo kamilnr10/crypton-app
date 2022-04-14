@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import CryptoReducer from './features/cryptosSlice';
+import { cryptoReducer } from './features/cryptosSlice';
+import { marketReducer } from './features/marketSlice';
 import userReducer from './features/userSlice';
 
 export default configureStore({
   reducer: {
-    cryptocurrency: CryptoReducer,
+    crypto: cryptoReducer,
+    market: marketReducer,
     user: userReducer,
   },
 });

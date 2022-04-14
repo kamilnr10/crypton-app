@@ -1,4 +1,4 @@
-import { SymbolWrapper } from 'components/templates/Dashboard/Dashboard.styles';
+import { SymbolWrapper } from 'pages/Dashboard/Dashboard.styles';
 
 export const tableHeight =
   ((window.innerHeight - 64 - 64 - 52 - 1) / window.innerHeight) * 100;

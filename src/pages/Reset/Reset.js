@@ -5,11 +5,10 @@ import { FormContainer } from 'components/atoms/FormContainer/FormContainer';
 import { FormWrapper } from 'components/atoms/FormWrapper/FormWrapper';
 import { CircleBackground } from 'components/atoms/CircleBackground/CircleBackground';
 import { Input } from 'components/atoms/Input/Input';
-import { ErrorBox } from 'components/atoms/ErrorBox/ErrorBox';
 import { Button } from 'components/atoms/Button/Button';
 import { useLogin } from 'helpers/firebase';
 
-export const Reset = () => {
+const Reset = () => {
   const [email, setEmail] = useState('');
   const { sendPasswordReset } = useLogin();
   const navigate = useNavigate();
@@ -35,3 +34,5 @@ export const Reset = () => {
     </FormWrapper>
   );
 };
+
+export default Reset;

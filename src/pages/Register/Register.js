@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FormContainer } from 'components/atoms/FormContainer/FormContainer';
 import { FormWrapper } from 'components/atoms/FormWrapper/FormWrapper';
 import { CircleBackground } from 'components/atoms/CircleBackground/CircleBackground';
 import { Input } from 'components/atoms/Input/Input';
-import { ErrorBox } from 'components/atoms/ErrorBox/ErrorBox';
 import { Button } from 'components/atoms/Button/Button';
 import { useLogin } from 'helpers/firebase';
 
-export const Register = () => {
+const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
@@ -74,3 +73,5 @@ export const Register = () => {
     </FormWrapper>
   );
 };
+
+export default Register;
