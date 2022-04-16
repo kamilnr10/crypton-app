@@ -4,12 +4,12 @@ import { getMarketData } from 'redux/features/marketSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Market = () => {
-  const { marketData, loading } = useSelector((state) => state.market);
+  const { marketData, loading, errors } = useSelector((state) => state.market);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getMarketData());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
@@ -18,6 +18,7 @@ const Market = () => {
       ) : (
         <span>{usNumberFormatter.format(marketData.total_market_cap.usd)}</span>
       )}
+      {errors ? <p>{errors[0]}</p> : null}
     </div>
   );
 };

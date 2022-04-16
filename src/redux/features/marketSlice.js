@@ -18,6 +18,7 @@ const marketSlice = createSlice({
   initialState: {
     marketData: [],
     loading: true,
+    errors: [],
   },
   reducers: {},
   extraReducers: {
@@ -28,8 +29,9 @@ const marketSlice = createSlice({
       state.marketData = payload.data;
       state.loading = false;
     },
-    [getMarketData.rejected]: (state, action) => {
+    [getMarketData.rejected]: (state, { payload }) => {
       state.loading = false;
+      state.errors.push(payload);
     },
   },
 });
