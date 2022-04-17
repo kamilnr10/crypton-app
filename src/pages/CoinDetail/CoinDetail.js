@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import CoinChart from 'components/organisms/CoinChart/CoinChart';
+import { singleCoin } from 'constants/api';
 
 const CoinDetailWrapper = styled.div`
   height: 100%;
@@ -38,18 +40,14 @@ const CoinDetail = () => {
       );
 
       const requestCoinMarketChart = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=30'`
+        `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1'`
       );
 
-      axios.all([requestCoinDetail, requestCoinMarketChart]).then(
-        axios.spread((...res) => {
-          console.log(res[0].data);
-          console.log(res[1].data);
-          setCoinData(res[0].data);
-          setCoinMarketChart(res[1].data);
-          setLoading(false);
-        })
-      );
+      await axios.get(singleCoin(id)).then(({ data }) => {
+        console.log(data);
+        setCoinData(data);
+        setLoading(false);
+      });
     };
 
     fetchData().catch((err) => console.timeLog(err));
@@ -60,11 +58,14 @@ const CoinDetail = () => {
       {loading ? (
         'Loading ...'
       ) : (
-        <CoinDetailHeader>
-          <p>{id.toLocaleUpperCase()}</p>
-          <p>({coinData.symbol.toLocaleUpperCase()})</p>
-          <img src={coinData.image.thumb} alt="icon" />
-        </CoinDetailHeader>
+        <>
+          <CoinDetailHeader>
+            <p>{id.toLocaleUpperCase()}</p>
+            <p>({coinData.symbol.toLocaleUpperCase()})</p>
+            <img src={coinData.image.thumb} alt="icon" />
+          </CoinDetailHeader>
+          <CoinChart />
+        </>
       )}
     </CoinDetailWrapper>
   );

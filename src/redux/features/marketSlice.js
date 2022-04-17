@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { marketInfo } from 'constants/api';
 
 export const getMarketData = createAsyncThunk(
   'market/getMarketData',
   async () => {
-    const res = await axios
-      .get('https://api.coingecko.com/api/v3/global')
-      .then(({ data }) => {
-        return data;
-      });
+    const res = await axios.get(marketInfo()).then(({ data }) => {
+      return data;
+    });
     return res;
   }
 );
