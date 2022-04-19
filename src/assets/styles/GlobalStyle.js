@@ -6,19 +6,21 @@ export const GlobalStyle = createGlobalStyle`
 html {
     box-sizing: border-box;
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
     height: 100%;
-    font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
+    font-family: 'Montserrat', sans-serif;
     color: white;
     background-color: #080710;
 }
 
 *, *::after, *::before {
-    box-sizing: inherit;
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     
