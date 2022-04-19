@@ -5,23 +5,16 @@ export const GlobalStyle = createGlobalStyle`
 
 html {
     box-sizing: border-box;
+    height: 100%;
 }
 
 body {
+    height: 100%;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
     color: white;
     background-color: #080710;
-    ${
-      '' /* background-color: #232328;
-     background-image: linear-gradient( #29323c 0%, #485563 100%);  */
-    }
-    /* background: #000000;  
-    background: -webkit-linear-gradient(to bottom, #434343, #000000);  
-    background: linear-gradient(to bottom, #434343, #000000); */
-
-
 }
 
 *, *::after, *::before {
