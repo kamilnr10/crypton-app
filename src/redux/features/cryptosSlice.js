@@ -6,9 +6,11 @@ import { endpoints } from 'data/endpoints';
 export const getCryptocurrencies = createAsyncThunk(
   'crypto/getCryptocurrencies',
   async () => {
-    const res = await axios.get(coinList()).then(({ data }) => {
-      return data;
-    });
+    const res = await axios
+      .get(coinList(), { crossDomain: true })
+      .then(({ data }) => {
+        return data;
+      });
     // console.log(res);
     return res;
   }
