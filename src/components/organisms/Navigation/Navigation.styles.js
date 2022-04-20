@@ -3,7 +3,11 @@ import { Indicator } from 'components/atoms/Indicator/Indicator';
 
 export const NavWrapper = styled.nav`
   width: 320px;
-  position: relative;
+  height: 50px;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
