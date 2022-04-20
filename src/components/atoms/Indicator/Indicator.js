@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Indicator = styled.div`
   position: absolute;
   top: -50%;
-  left: 7px;
+  left: calc((${({ navItemWidth }) => navItemWidth}px / 2 - 25px));
   width: 50px;
   height: 50px;
   background-color: #29fd53;

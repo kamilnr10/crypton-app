@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BarChartOutline } from 'react-ionicons';
 import { StarOutline } from 'react-ionicons';
 import { SearchOutline } from 'react-ionicons';
@@ -9,10 +9,18 @@ import { NavWrapper } from './Navigation.styles';
 import { Indicator } from 'components/atoms/Indicator/Indicator';
 
 export const Navigation = () => {
+  const [navItemWidth, setItemWidth] = useState(null);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    console.log('width', ref.current.offsetWidth);
+    setItemWidth(ref.current.offsetWidth);
+  }, []);
+
   return (
     <NavWrapper>
-      <ul>
-        <NavLink to="dashboard">
+      <ul navItemWidth={navItemWidth}>
+        <NavLink to="dashboard" ref={ref}>
           <div>
             <BarChartOutline />
             <span className="text">Market</span>
@@ -42,7 +50,7 @@ export const Navigation = () => {
             <span className="text">More</span>
           </div>
         </NavLink>
-        <Indicator />
+        <Indicator navItemWidth={navItemWidth} />
       </ul>
     </NavWrapper>
   );

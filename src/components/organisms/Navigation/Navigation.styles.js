@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Indicator } from 'components/atoms/Indicator/Indicator';
 
 export const NavWrapper = styled.nav`
-  width: 320px;
+  width: 100%;
   height: 50px;
   position: fixed;
   bottom: 0;
@@ -84,19 +84,29 @@ export const NavWrapper = styled.nav`
     }
 
     a:nth-child(1).active ~ ${Indicator} {
-      transform: translateX(calc(64px * 0));
+      transform: translateX(
+        calc(${({ children }) => children.props.navItemWidth}px * 0)
+      );
     }
     a:nth-child(2).active ~ ${Indicator} {
-      transform: translateX(calc(64px * 1));
+      transform: translateX(
+        calc(${({ children }) => children.props.navItemWidth}px * 1)
+      );
     }
     a:nth-child(3).active ~ ${Indicator} {
-      transform: translateX(calc(64px * 2));
+      transform: translateX(
+        calc(${({ children }) => children.props.navItemWidth}px * 2)
+      );
     }
     a:nth-child(4).active ~ ${Indicator} {
-      transform: translateX(calc(64px * 3));
+      transform: translateX(
+        calc(${({ children }) => children.props.navItemWidth}px * 3)
+      );
     }
     a:nth-child(5).active ~ ${Indicator} {
-      transform: translateX(calc(64px * 4));
+      transform: translateX(
+        calc(${({ children }) => children.props.navItemWidth}px * 4)
+      );
     }
   }
 `;
